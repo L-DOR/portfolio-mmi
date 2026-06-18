@@ -1295,7 +1295,7 @@
 </footer>
 
 <script>
-// Cursor
+
 const cursor = document.getElementById('cursor');
 const trail = document.getElementById('cursorTrail');
 let mx = 0, my = 0, tx = 0, ty = 0;
@@ -1315,7 +1315,7 @@ document.querySelectorAll('a, button, .skill-chip, .project-card').forEach(el =>
   el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; cursor.style.background = 'var(--c1)'; });
 });
 
-// Particles
+
 const pCont = document.getElementById('particles');
 for (let i = 0; i < 80; i++) {
   const p = document.createElement('div');
@@ -1332,7 +1332,6 @@ for (let i = 0; i < 80; i++) {
   pCont.appendChild(p);
 }
 
-// Intersection observer for reveals + timeline
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -1352,7 +1351,6 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal, .timeline-item').forEach(el => observer.observe(el));
 
-// Bar fills trigger
 const cvSection = document.getElementById('cv');
 const cvObs = new IntersectionObserver(entries => {
   if (entries[0].isIntersecting) {
@@ -1366,7 +1364,6 @@ const cvObs = new IntersectionObserver(entries => {
 }, { threshold: 0.2 });
 cvObs.observe(cvSection);
 
-// Active nav link on scroll
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a');
 const navObs = new IntersectionObserver(entries => {
@@ -1380,7 +1377,6 @@ const navObs = new IntersectionObserver(entries => {
 }, { threshold: 0.4 });
 sections.forEach(s => navObs.observe(s));
 
-// Form submit
 function submitForm() {
   const name = document.getElementById('fname').value;
   const email = document.getElementById('femail').value;
@@ -1389,7 +1385,6 @@ function submitForm() {
   document.getElementById('formSuccess').classList.add('show');
 }
 
-// Timeline stagger on scroll
 const tlObs = new IntersectionObserver(entries => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
@@ -1400,7 +1395,6 @@ const tlObs = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.timeline-item').forEach(item => tlObs.observe(item));
 
-// Parallax hero blobs
 document.addEventListener('mousemove', e => {
   const x = (e.clientX / window.innerWidth - 0.5) * 30;
   const y = (e.clientY / window.innerHeight - 0.5) * 30;
