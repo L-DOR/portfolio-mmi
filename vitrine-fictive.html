@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site vitrine fictif · Portfolio MMI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --c1: #FF6B6B;
+    --c2: #FF8E53;
+    --c3: #A855F7;
+    --c4: #3B82F6;
+    --c5: #06B6D4;
+    --bg: #0A0A0F;
+    --bg2: #111118;
+    --bg3: #18181F;
+    --text: #F0EFF8;
+    --muted: #9998AA;
+    --border: rgba(255,255,255,0.08);
+    --grad: linear-gradient(135deg, var(--c1), var(--c2), var(--c3));
+    --grad2: linear-gradient(135deg, var(--c3), var(--c4), var(--c5));
+    --card-size: clamp(70px, 13vw, 110px);
+  }
+
+  html, body {
+    min-height: 100vh;
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--c1);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-trail {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(255,107,107,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* PARTICLES */
+  #particles {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .particle {
+    position: absolute; width: 2px; height: 2px;
+    background: white; border-radius: 50%; opacity: 0;
+    animation: twinkle var(--d) ease-in-out infinite var(--delay);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: var(--op); }
+  }
+
+  /* BLOBS */
+  .blob {
+    position: fixed; border-radius: 50%;
+    filter: blur(90px); opacity: 0.1;
+    pointer-events: none; z-index: 0;
+    animation: floatBlob 10s ease-in-out infinite;
+  }
+  .b1 { width:500px;height:500px;background:var(--c3);top:-100px;right:-100px; }
+  .b2 { width:350px;height:350px;background:var(--c1);bottom:-80px;left:-80px;animation-delay:-4s; }
+  @keyframes floatBlob {
+    0%,100%{transform:translate(0,0);}
+    50%{transform:translate(20px,-20px);}
+  }
+
+  /* HEADER */
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 2.5rem;
+    background: rgba(10,10,15,0.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500;
+    transition: color 0.2s;
+    cursor: none;
+  }
+  .back-btn svg { width:16px;height:16px;transition:transform 0.2s; }
+  .back-btn:hover { color: var(--text); }
+  .back-btn:hover svg { transform: translateX(-3px); }
+  .header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 800;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-tag {
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--muted);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    padding: 8rem 1.5rem 4rem;
+    gap: 2rem;
+  }
+
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<div id="particles"></div>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="back-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Retour au portfolio
+  </a>
+  <div class="header-title">Site vitrine fictif</div>
+  <span class="header-tag">Projet Web #3    </span>
+</header>
+
+<!-- MAIN -->
+<main>
+  <div class="game-hero">
+    <div class="game-eyebrow">Projet HTML/CSS</div>
+    <h1 class="game-title">A <span>VENIR</span></h1>
+    <p class="game-subtitle">le site est en cours de développement...</p>
+  </div>
+
+<script
+// ─── CURSOR ─────────────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mx = 0, my = 0, tx = 0, ty = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 6 + 'px';
+  cursor.style.top = my - 6 + 'px';
+});
+setInterval(() => {
+  tx += (mx - tx) * 0.12; ty += (my - ty) * 0.12;
+  trail.style.left = tx - 18 + 'px';
+  trail.style.top = ty - 18 + 'px';
+}, 16);
+
+// ─── PARTICLES ──────────────────────────────────────────────────────────
+const pCont = document.getElementById('particles');
+for (let i = 0; i < 60; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s;--op:${0.1+Math.random()*0.3};`;
+  pCont.appendChild(p);
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────
+buildIdleGrid();
+document.getElementById('statPairs').textContent = `0 / ${state.pairs}`;
+</script>
+</body>
+</html>
