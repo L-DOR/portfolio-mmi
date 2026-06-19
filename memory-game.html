@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory — Projet Web · Portfolio MMI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --c1: #FF6B6B;
+    --c2: #FF8E53;
+    --c3: #A855F7;
+    --c4: #3B82F6;
+    --c5: #06B6D4;
+    --bg: #0A0A0F;
+    --bg2: #111118;
+    --bg3: #18181F;
+    --text: #F0EFF8;
+    --muted: #9998AA;
+    --border: rgba(255,255,255,0.08);
+    --grad: linear-gradient(135deg, var(--c1), var(--c2), var(--c3));
+    --grad2: linear-gradient(135deg, var(--c3), var(--c4), var(--c5));
+    --card-size: clamp(70px, 13vw, 110px);
+  }
+
+  html, body {
+    min-height: 100vh;
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--c1);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-trail {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(255,107,107,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* PARTICLES */
+  #particles {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .particle {
+    position: absolute; width: 2px; height: 2px;
+    background: white; border-radius: 50%; opacity: 0;
+    animation: twinkle var(--d) ease-in-out infinite var(--delay);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: var(--op); }
+  }
+
+  /* BLOBS */
+  .blob {
+    position: fixed; border-radius: 50%;
+    filter: blur(90px); opacity: 0.1;
+    pointer-events: none; z-index: 0;
+    animation: floatBlob 10s ease-in-out infinite;
+  }
+  .b1 { width:500px;height:500px;background:var(--c3);top:-100px;right:-100px; }
+  .b2 { width:350px;height:350px;background:var(--c1);bottom:-80px;left:-80px;animation-delay:-4s; }
+  @keyframes floatBlob {
+    0%,100%{transform:translate(0,0);}
+    50%{transform:translate(20px,-20px);}
+  }
+
+  /* HEADER */
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 2.5rem;
+    background: rgba(10,10,15,0.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500;
+    transition: color 0.2s;
+    cursor: none;
+  }
+  .back-btn svg { width:16px;height:16px;transition:transform 0.2s; }
+  .back-btn:hover { color: var(--text); }
+  .back-btn:hover svg { transform: translateX(-3px); }
+  .header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 800;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-tag {
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--muted);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    padding: 8rem 1.5rem 4rem;
+    gap: 2rem;
+  }
+
+  /* HERO TEXT */
+  .game-hero {
+    text-align: center;
+    max-width: 560px;
+  }
+  .game-eyebrow {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--c3); margin-bottom: 0.75rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+  }
+  .game-eyebrow::before, .game-eyebrow::after {
+    content: ''; width: 24px; height: 1px; background: var(--c3);
+  }
+  .game-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    font-weight: 800; line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.75rem;
+  }
+  .game-title span {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .game-subtitle {
+    font-size: 0.95rem; color: var(--muted); line-height: 1.6;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex; align-items: center; gap: 1.5rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1rem 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0.1rem;
+  }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem; font-weight: 800;
+    line-height: 1;
+    background: var(--grad2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stat-divider {
+    width: 1px; height: 36px;
+    background: var(--border);
+  }
+
+  /* TIMER BAR */
+  .timer-track {
+    width: min(500px, 90vw); height: 3px;
+    background: var(--border); border-radius: 3px;
+    overflow: visible; position: relative;
+  }
+  .timer-fill {
+    height: 100%; border-radius: 3px;
+    background: var(--grad);
+    transition: width 1s linear;
+    position: relative;
+  }
+  .timer-fill::after {
+    content: '';
+    position: absolute; right: -4px; top: -4px;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--c1);
+    box-shadow: 0 0 10px var(--c1);
+  }
+
+  /* GRID */
+  .grid-container {
+    perspective: 1200px;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, var(--card-size));
+    grid-template-rows: repeat(4, var(--card-size));
+    gap: 14px;
+  }
+
+  /* CARD */
+  .card {
+    width: var(--card-size);
+    height: var(--card-size);
+    cursor: none;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .card.matched { transform: rotateY(180deg); pointer-events: none; }
+  .card.matched .card-back { animation: matchPulse 0.5s ease forwards; }
+  @keyframes matchPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(168,85,247,0.6); }
+    50%  { box-shadow: 0 0 0 12px rgba(168,85,247,0); }
+    100% { box-shadow: 0 0 0 0 rgba(168,85,247,0); border-color: rgba(168,85,247,0.6); }
+  }
+  .card.shake {
+    animation: shake 0.4s ease;
+  }
+  @keyframes shake {
+    0%,100%{transform:rotateY(180deg) translateX(0);}
+    25%{transform:rotateY(180deg) translateX(-5px);}
+    75%{transform:rotateY(180deg) translateX(5px);}
+  }
+
+  .card-face {
+    position: absolute; inset: 0;
+    border-radius: 16px;
+    backface-visibility: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* FRONT (caché) */
+  .card-front {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+  }
+  .card-front::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(168,85,247,0.04), rgba(59,130,246,0.04));
+  }
+  .card-front-pattern {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(168,85,247,0.08) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .card-front-logo {
+    position: relative; z-index: 1;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 800;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0.5;
+  }
+  .card:not(.flipped):not(.matched):hover .card-front {
+    border-color: rgba(168,85,247,0.3);
+    background: #1a1a24;
+  }
+  .card:not(.flipped):not(.matched):hover .card-front-logo { opacity: 1; }
+
+  /* BACK (révélé) */
+  .card-back {
+    transform: rotateY(180deg);
+    border: 1px solid var(--border);
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card-icon {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    line-height: 1;
+    filter: drop-shadow(0 0 12px currentColor);
+  }
+  .card-label {
+    font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  /* Card color themes */
+  .theme-purple .card-back { background: linear-gradient(135deg, #150828, #2d0d5a); color: #C084FC; }
+  .theme-blue   .card-back { background: linear-gradient(135deg, #071428, #0f2a5f); color: #60A5FA; }
+  .theme-cyan   .card-back { background: linear-gradient(135deg, #041520, #083050); color: #22D3EE; }
+  .theme-orange .card-back { background: linear-gradient(135deg, #1a0d02, #3d1f06); color: #FB923C; }
+  .theme-red    .card-back { background: linear-gradient(135deg, #1a0505, #3d0f0f); color: #F87171; }
+  .theme-green  .card-back { background: linear-gradient(135deg, #041408, #0a3014); color: #4ADE80; }
+  .theme-pink   .card-back { background: linear-gradient(135deg, #1a0510, #3d0f28); color: #F472B6; }
+  .theme-amber  .card-back { background: linear-gradient(135deg, #14100a, #3d2e0a); color: #FCD34D; }
+
+  /* DIFFICULTY PICKER */
+  .difficulty-bar {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
+  }
+  .diff-btn {
+    padding: 0.4rem 1.1rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem; font-weight: 600;
+    cursor: none;
+    transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .diff-btn:hover { border-color: rgba(168,85,247,0.4); color: var(--text); }
+  .diff-btn.active {
+    background: rgba(168,85,247,0.2);
+    border-color: var(--c3); color: var(--c3);
+  }
+
+  /* CONTROLS */
+  .controls {
+    display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;
+  }
+  .ctrl-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.7rem 1.5rem;
+    border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem; font-weight: 600;
+    cursor: none; border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .ctrl-btn svg { width:15px;height:15px; }
+  .btn-start {
+    background: var(--grad); color: white;
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(255,107,107,0.3); }
+  .btn-restart {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border) !important;
+    border: none;
+  }
+  .btn-restart:hover { color: var(--text); border-color: rgba(255,255,255,0.2) !important; }
+
+  /* WIN OVERLAY */
+  .win-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 1.5rem;
+    text-align: center; padding: 2rem;
+  }
+  .win-overlay.show { display: flex; }
+
+  .win-card {
+    background: var(--bg2);
+    border: 1px solid rgba(168,85,247,0.3);
+    border-radius: 28px;
+    padding: 3rem 3.5rem;
+    max-width: 460px; width: 100%;
+    position: relative; overflow: hidden;
+    animation: winPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes winPop {
+    from { transform: scale(0.6); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .win-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(59,130,246,0.08));
+  }
+  .win-inner { position: relative; z-index: 1; }
+  .win-emoji { font-size: 4rem; margin-bottom: 0.5rem; animation: bounce 1s ease infinite; }
+  @keyframes bounce {
+    0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}
+  }
+  .win-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+  .win-title span {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .win-sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 2rem; }
+  .win-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.75rem; margin-bottom: 2rem;
+  }
+  .win-stat {
+    background: var(--bg3);
+    border-radius: 14px; padding: 1rem;
+    border: 1px solid var(--border);
+  }
+  .win-stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem; font-weight: 800;
+    background: var(--grad2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+  }
+  .win-stat-label { font-size: 0.7rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; }
+  .win-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  .win-play-again {
+    background: var(--grad); color: white;
+    border: none; padding: 0.8rem 1.8rem;
+    border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600; font-size: 0.9rem;
+    cursor: none; transition: transform 0.2s;
+  }
+  .win-play-again:hover { transform: scale(1.05); }
+
+  /* CONFETTI */
+  .confetti-piece {
+    position: fixed;
+    width: 10px; height: 10px;
+    pointer-events: none; z-index: 300;
+    animation: confettiFall linear forwards;
+    border-radius: 2px;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* IDLE STATE */
+  .idle-grid {
+    opacity: 0.4;
+    pointer-events: none;
+    filter: blur(1px);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 520px) {
+    :root { --card-size: 68px; }
+    .cards-grid { gap: 10px; }
+    header { padding: 1rem 1.2rem; }
+    .header-tag { display: none; }
+    .win-card { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<div id="particles"></div>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="portfolio-mmi.html" class="back-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    Retour au portfolio
+  </a>
+  <div class="header-title">Memory.</div>
+  <span class="header-tag">Projet Web #2</span>
+</header>
+
+<!-- WIN OVERLAY -->
+<div class="win-overlay" id="winOverlay">
+  <div class="win-card">
+    <div class="win-inner">
+      <div class="win-emoji">🎉</div>
+      <div class="win-title">Bien <span>joué !</span></div>
+      <p class="win-sub" id="winSub">Tu as trouvé toutes les paires !</p>
+      <div class="win-stats">
+        <div class="win-stat">
+          <span class="win-stat-value" id="wMoves">—</span>
+          <span class="win-stat-label">Tentatives</span>
+        </div>
+        <div class="win-stat">
+          <span class="win-stat-value" id="wTime">—</span>
+          <span class="win-stat-label">Temps</span>
+        </div>
+        <div class="win-stat">
+          <span class="win-stat-value" id="wPairs">—</span>
+          <span class="win-stat-label">Paires</span>
+        </div>
+        <div class="win-stat">
+          <span class="win-stat-value" id="wScore">—</span>
+          <span class="win-stat-label">Score</span>
+        </div>
+      </div>
+      <div class="win-btns">
+        <button class="win-play-again" onclick="startGame()">Rejouer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <div class="game-hero">
+    <div class="game-eyebrow">Projet JS</div>
+    <h1 class="game-title">Memory <span>Game</span></h1>
+    <p class="game-subtitle">Retrouve toutes les paires cachées. Teste ta mémoire !</p>
+  </div>
+
+  <!-- Difficulty -->
+  <div class="difficulty-bar" id="diffBar">
+    <button class="diff-btn active" data-pairs="6" onclick="setDiff(this,6)">Facile · 6</button>
+    <button class="diff-btn" data-pairs="8" onclick="setDiff(this,8)">Normal · 8</button>
+    <button class="diff-btn" data-pairs="12" onclick="setDiff(this,12)">Difficile · 12</button>
+  </div>
+
+  <!-- Timer track -->
+  <div class="timer-track">
+    <div class="timer-fill" id="timerFill" style="width:100%"></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value" id="statMoves">0</div>
+      <div class="stat-label">Tentatives</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-value" id="statPairs">0 / 0</div>
+      <div class="stat-label">Paires</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-value" id="statTime">0:00</div>
+      <div class="stat-label">Temps</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-value" id="statScore">0</div>
+      <div class="stat-label">Score</div>
+    </div>
+  </div>
+
+  <!-- Board -->
+  <div class="grid-container">
+    <div class="cards-grid idle-grid" id="cardsGrid"></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="ctrl-btn btn-start" onclick="startGame()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Nouvelle partie
+    </button>
+    <button class="ctrl-btn btn-restart" onclick="resetGame()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+      Réinitialiser
+    </button>
+  </div>
+</main>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────
+const ALL_CARDS = [
+  { id:'html',   icon:'🌐', label:'HTML',    theme:'theme-blue'   },
+  { id:'css',    icon:'🎨', label:'CSS',     theme:'theme-purple' },
+  { id:'js',     icon:'⚡', label:'JS',      theme:'theme-amber'  },
+  { id:'figma',  icon:'✏️', label:'Figma',   theme:'theme-cyan'   },
+  { id:'react',  icon:'⚛️', label:'React',   theme:'theme-blue'   },
+  { id:'photo',  icon:'📷', label:'Photo',   theme:'theme-red'    },
+  { id:'git',    icon:'🔀', label:'Git',     theme:'theme-orange' },
+  { id:'design', icon:'💎', label:'Design',  theme:'theme-pink'   },
+  { id:'3d',     icon:'🧊', label:'3D',      theme:'theme-cyan'   },
+  { id:'video',  icon:'🎬', label:'Vidéo',   theme:'theme-red'    },
+  { id:'audio',  icon:'🎵', label:'Audio',   theme:'theme-green'  },
+  { id:'ai',     icon:'🤖', label:'IA',      theme:'theme-purple' },
+];
+
+// ─── STATE ──────────────────────────────────────────────────────────────
+let state = {
+  pairs: 8,
+  cards: [],
+  flipped: [],
+  matched: [],
+  moves: 0,
+  score: 0,
+  timer: null,
+  elapsed: 0,
+  maxTime: 120,
+  locked: false,
+  started: false,
+};
+
+// ─── DIFFICULTY ─────────────────────────────────────────────────────────
+function setDiff(btn, pairs) {
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  state.pairs = pairs;
+  state.maxTime = pairs === 6 ? 60 : pairs === 8 ? 120 : 200;
+
+  resetGame(); // reconstruit la grille avec la nouvelle difficulté
+}
+
+// ─── SHUFFLE ────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ─── BUILD IDLE GRID ────────────────────────────────────────────────────
+function buildIdleGrid() {
+  const grid = document.getElementById('cardsGrid');
+  const n = state.pairs;
+  const cols = n <= 6 ? 4 : 4;
+  grid.style.gridTemplateColumns = `repeat(${cols}, var(--card-size))`;
+  grid.style.gridTemplateRows = `repeat(${Math.ceil(n * 2 / cols)}, var(--card-size))`;
+  grid.innerHTML = '';
+  grid.className = 'cards-grid idle-grid';
+  for (let i = 0; i < n * 2; i++) {
+    const c = document.createElement('div');
+    c.className = 'card';
+    c.innerHTML = `
+      <div class="card-face card-front">
+        <div class="card-front-pattern"></div>
+        <span class="card-front-logo">?</span>
+      </div>
+      <div class="card-face card-back ${ALL_CARDS[i % ALL_CARDS.length].theme}">
+        <span class="card-icon">${ALL_CARDS[i % ALL_CARDS.length].icon}</span>
+      </div>`;
+    grid.appendChild(c);
+  }
+}
+
+// ─── START GAME ─────────────────────────────────────────────────────────
+function startGame() {
+  clearInterval(state.timer);
+  document.getElementById('winOverlay').classList.remove('show');
+
+  const pool = shuffle([...ALL_CARDS]).slice(0, state.pairs);
+  state.cards = shuffle([...pool, ...pool].map((c, i) => ({ ...c, uid: i })));
+  state.flipped = [];
+  state.matched = [];
+  state.moves = 0;
+  state.score = 0;
+  state.elapsed = 0;
+  state.locked = false;
+  state.started = true;
+
+  updateStats();
+  timerFill(100);
+  renderGrid();
+
+  state.timer = setInterval(() => {
+    state.elapsed++;
+    const pct = Math.max(0, 100 - (state.elapsed / state.maxTime) * 100);
+    timerFill(pct);
+    updateTime();
+    if (state.elapsed >= state.maxTime) {
+      clearInterval(state.timer);
+      // Time's up — show game over with red tint
+      showTimeUp();
+    }
+  }, 1000);
+}
+
+// ─── RENDER GRID ────────────────────────────────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('cardsGrid');
+  const n = state.pairs;
+  const cols = 4;
+  grid.style.gridTemplateColumns = `repeat(${cols}, var(--card-size))`;
+  grid.style.gridTemplateRows = `repeat(${Math.ceil(n * 2 / cols)}, var(--card-size))`;
+  grid.innerHTML = '';
+  grid.className = 'cards-grid';
+
+  state.cards.forEach((card, idx) => {
+    const el = document.createElement('div');
+    // La classe d'entrée est séparée — elle ne touche pas la transition du flip
+    el.className = `card ${card.theme} entering`;
+    el.dataset.idx = idx;
+    el.innerHTML = `
+      <div class="card-face card-front">
+        <div class="card-front-pattern"></div>
+        <span class="card-front-logo">M</span>
+      </div>
+      <div class="card-face card-back ${card.theme}">
+        <span class="card-icon">${card.icon}</span>
+        <span class="card-label">${card.label}</span>
+      </div>`;
+    el.addEventListener('click', () => flipCard(idx, el));
+    grid.appendChild(el);
+    // Retire la classe d'entrée après l'animation pour libérer la transition du flip
+    setTimeout(() => el.classList.remove('entering'), 400 + idx * 35);
+  });
+}
+
+// ─── FLIP CARD ──────────────────────────────────────────────────────────
+function flipCard(idx, el) {
+  if (!state.started) return;
+  // On bloque seulement si on a déjà 2 cartes retournées non matchées en attente
+  if (state.flipped.length >= 2) return;
+  if (state.flipped.includes(idx)) return;
+  if (state.matched.includes(idx)) return;
+
+  // Retournement immédiat, visible tout de suite
+  el.classList.add('flipped');
+  state.flipped.push(idx);
+
+  if (state.flipped.length === 2) {
+    state.moves++;
+    updateStats();
+
+    const [i1, i2] = state.flipped;
+    const c1 = state.cards[i1];
+    const c2 = state.cards[i2];
+
+    if (c1.id === c2.id) {
+      // MATCH — on marque immédiatement, les cartes restent retournées
+      state.matched.push(i1, i2);
+      const timeBonus = Math.max(0, state.maxTime - state.elapsed);
+      const pts = 100 + Math.floor(timeBonus * 0.5);
+      state.score += pts;
+
+      // Petite animation de succès puis libération
+      setTimeout(() => {
+        [i1, i2].forEach(i => {
+          const card = document.querySelector(`[data-idx="${i}"]`);
+          if (card) card.classList.add('matched'); // reste retournée + glow
+        });
+        state.flipped = [];
+        updateStats();
+
+        if (state.matched.length === state.cards.length) {
+          setTimeout(showWin, 400);
+        }
+      }, 250);
+    } else {
+      // NO MATCH — les deux cartes sont visibles le temps que le joueur les mémorise,
+      // puis elles se retournent après un délai naturel
+      setTimeout(() => {
+        [i1, i2].forEach(i => {
+          const card = document.querySelector(`[data-idx="${i}"]`);
+          if (card) {
+            card.classList.add('shake');
+            setTimeout(() => {
+              card.classList.remove('flipped');
+              card.classList.remove('shake');
+            }, 400);
+          }
+        });
+        state.flipped = [];
+      }, 1000); // 1s de visibilité avant de se retourner
+    }
+  }
+}
+
+// ─── RESET ──────────────────────────────────────────────────────────────
+function resetGame() {
+  clearInterval(state.timer);
+  state.started = false;
+  state.elapsed = 0;
+  state.moves = 0;
+  state.score = 0;
+  state.flipped = [];
+  state.matched = [];
+  document.getElementById('winOverlay').classList.remove('show');
+  updateStats();
+  timerFill(100);
+  buildIdleGrid();
+}
+
+// ─── WIN ────────────────────────────────────────────────────────────────
+function showWin() {
+  clearInterval(state.timer);
+  const efficiency = state.matched.length / 2;
+  const bonus = state.moves <= efficiency ? '⚡ Parfait !' : state.moves <= efficiency * 1.5 ? '🔥 Excellent !' : '👍 Bien joué !';
+
+  document.getElementById('wMoves').textContent = state.moves;
+  document.getElementById('wTime').textContent = formatTime(state.elapsed);
+  document.getElementById('wPairs').textContent = efficiency;
+  document.getElementById('wScore').textContent = state.score;
+  document.getElementById('winSub').textContent = bonus + ' Tu as trouvé toutes les paires !';
+  document.getElementById('winOverlay').classList.add('show');
+  launchConfetti();
+}
+
+function showTimeUp() {
+  state.started = false;
+  // Reveal all remaining cards briefly then show overlay
+  document.querySelectorAll('.card:not(.matched)').forEach(c => c.classList.add('flipped'));
+  setTimeout(() => {
+    document.getElementById('wMoves').textContent = state.moves;
+    document.getElementById('wTime').textContent = '⏰ Temps !';
+    document.getElementById('wPairs').textContent = `${state.matched.length / 2} / ${state.pairs}`;
+    document.getElementById('wScore').textContent = state.score;
+    document.getElementById('winSub').textContent = `Tu n'as trouvé que ${state.matched.length / 2} paires sur ${state.pairs}. Réessaie !`;
+    document.getElementById('winOverlay').classList.add('show');
+  }, 800);
+}
+
+// ─── CONFETTI ───────────────────────────────────────────────────────────
+function launchConfetti() {
+  const colors = ['#FF6B6B','#FF8E53','#A855F7','#3B82F6','#06B6D4','#22C55E','#F472B6','#FCD34D'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left:${Math.random() * 100}vw;
+      top:-10px;
+      background:${colors[Math.floor(Math.random() * colors.length)]};
+      width:${6 + Math.random() * 8}px;
+      height:${6 + Math.random() * 8}px;
+      border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration:${1.5 + Math.random() * 2.5}s;
+      animation-delay:${Math.random() * 0.8}s;
+    `;
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+// ─── STATS ──────────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('statMoves').textContent = state.moves;
+  document.getElementById('statPairs').textContent = `${state.matched.length / 2} / ${state.pairs}`;
+  document.getElementById('statScore').textContent = state.score;
+  updateTime();
+}
+function updateTime() {
+  document.getElementById('statTime').textContent = formatTime(state.elapsed);
+}
+function formatTime(s) {
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+function timerFill(pct) {
+  const fill = document.getElementById('timerFill');
+  fill.style.width = pct + '%';
+  fill.style.background = pct > 50 ? 'var(--grad)' :
+                           pct > 25 ? 'linear-gradient(135deg,#FF8E53,#FF6B6B)' :
+                                      'linear-gradient(135deg,#FF6B6B,#dc2626)';
+}
+
+// ─── CURSOR ─────────────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mx = 0, my = 0, tx = 0, ty = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 6 + 'px';
+  cursor.style.top = my - 6 + 'px';
+});
+setInterval(() => {
+  tx += (mx - tx) * 0.12; ty += (my - ty) * 0.12;
+  trail.style.left = tx - 18 + 'px';
+  trail.style.top = ty - 18 + 'px';
+}, 16);
+
+// ─── PARTICLES ──────────────────────────────────────────────────────────
+const pCont = document.getElementById('particles');
+for (let i = 0; i < 60; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s;--op:${0.1+Math.random()*0.3};`;
+  pCont.appendChild(p);
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────
+buildIdleGrid();
+document.getElementById('statPairs').textContent = `0 / ${state.pairs}`;
+</script>
+</body>
+</html>
