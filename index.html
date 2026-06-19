@@ -498,6 +498,127 @@
   .now-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.4rem; }
   .now-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
 
+/* ========== PROJETS ========== */
+  #projects {
+    max-width: 1200px;
+  }
+ 
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .project-wide {
+  grid-column: 1 / -1;
+}
+ 
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    position: relative;
+    group: true;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .project-card:hover .project-preview { opacity: 0.8; }
+ 
+  .project-preview {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    transition: opacity 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .preview-1 { background: linear-gradient(135deg, #1a0533, #3b0f6b, #7c3aed); }
+  .preview-2 { background: linear-gradient(135deg, #0f1f3b, #1e3a5f, #3b82f6); }
+  .preview-3 { background: linear-gradient(135deg, #330f0f, #7c2020, #ef4444); }
+  .preview-4 { background: linear-gradient(135deg, #0f2e2a, #0f5f4f, #06b6d4); }
+ 
+  .preview-text {
+    position: relative;
+    z-index: 2;
+    font-size: 4rem;
+    opacity: 0.4;
+  }
+ 
+  .coming-soon-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted);
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+ 
+  .project-body {
+    padding: 1.5rem;
+  }
+ 
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+  .project-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+  .tag-purple { background: rgba(168,85,247,0.2); color: #C084FC; }
+  .tag-blue   { background: rgba(59,130,246,0.2); color: #60A5FA; }
+  .tag-cyan   { background: rgba(6,182,212,0.2); color: #22D3EE; }
+  .tag-red    { background: rgba(239,68,68,0.2); color: #F87171; }
+ 
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .project-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+ 
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .project-link:hover { color: var(--text); }
+  .project-link svg { width: 16px; height: 16px; transition: transform 0.2s; }
+  .project-link:hover svg { transform: translate(2px, -2px); }
+
     /* ========== CV ========== */
   #cv {
     max-width: 1200px;
@@ -884,6 +1005,7 @@
   <ul class="nav-links">
     <li><a href="#home" class="active">Accueil</a></li>
     <li><a href="#about">À propos</a></li>
+    <li><a href="#projects">Projets</a></li>
     <li><a href="#cv">CV</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -1037,6 +1159,119 @@
   </div>
 </section>
 
+<div class="section-sep"></div>
+
+<!-- ============================== PROJETS ============================== -->
+<section id="projects">
+  <div class="section-header reveal">
+    <div class="section-label">Mes créations</div>
+    <h2 class="section-title">Projets.</h2>
+  </div>
+ 
+  <div class="projects-grid">
+    <!-- Projet 1 -->
+    <div class="project-card reveal">
+      <div class="project-preview preview-1">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;">
+          <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:white;opacity:0.9;">Projet HTML/CSS</div>
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);font-weight:500;letter-spacing:0.03em;">Portfolio MMI</div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag tag-purple">HTML</span>
+          <span class="project-tag tag-blue">CSS</span>
+        </div>
+        <h3 class="project-title">Portfolio MMI</h3>
+        <p class="project-desc">Création de mon portfolio personnel afin de présenter mon parcours, mes compétences et mes projets. Ce site met en avant mes connaissances en HTML/CSS ainsi que mon intérêt pour le design et le développement web.</p>
+        <span class="project-link" style="color:var(--muted);font-size:0.82rem;">
+          Projet actuel
+        </span>
+      </div>
+    </div>
+ 
+    <!-- Projet 2 — Memory Game -->
+<a href="memory-game.html" class="project-card reveal" style="transition-delay:0.1s; text-decoration:none; display:block; cursor:none;">
+  <div class="project-preview preview-2">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;">
+      <div style="font-size:2.5rem;">🧠</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:white;opacity:0.9;">Memory Game</div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);font-weight:500;background:rgba(255,255,255,0.1);padding:0.25rem 0.8rem;border-radius:100px;">Jouer →</div>
+    </div>
+  </div>
+  <div class="project-body">
+    <div class="project-tags">
+      <span class="project-tag tag-blue">HTML</span>
+      <span class="project-tag tag-cyan">CSS</span>
+      <span class="project-tag tag-purple">JavaScript</span>
+    </div>
+    <h3 class="project-title">Memory Game</h3>
+    <p class="project-desc">Jeu de mémoire interactif — retrouve toutes les paires de cartes. Difficultés, timer, score et confettis inclus !</p>
+    <span class="project-link">
+      Voir le projet
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </span>
+  </div>
+</a>
+ 
+    <!-- Projet 3 — Site vitrine fictif -->
+<a href="camping-vitrine.html" class="project-card project-wide reveal" style="transition-delay:0.2s; text-decoration:none; display:block; cursor:pointer;">  <div class="project-preview preview-3">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;">
+      <div style="font-size:3rem;">🏕️</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:white;opacity:0.9;">
+        Site vitrine fictif
+      </div>
+    </div>
+  </div>
+  <div class="project-body">
+    <div class="project-tags">
+      <span class="project-tag tag-purple">HTML</span>
+      <span class="project-tag tag-blue">CSS</span>
+    </div>
+    <h3 class="project-title">Camping Côte d'Azur</h3>
+    <p class="project-desc">
+      Réalisation d'un site vitrine fictif pour un camping situé sur la Côte d'Azur. 
+      Ce projet m'a permis de travailler la création de pages attractives, 
+      l'intégration responsive, la mise en valeur des services proposés et 
+      l'expérience utilisateur dans un contexte touristique.
+    </p>
+    <span class="project-link">
+      Voir le projet
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </span>
+  </div>
+</a>
+ 
+    <!-- Projet 4 — Photo 
+    <div class="project-card reveal" style="transition-delay:0.3s">
+      <div class="project-preview preview-4">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;">
+          <div style="font-size:3rem;">📷</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:white;opacity:0.9;">Galerie photo</div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag tag-cyan">Photographie</span>
+        </div>
+        <h3 class="project-title">Portfolio photo</h3>
+        <p class="project-desc">Série de photographies urbaines et de portraits. Retouche sous Lightroom et Photoshop.</p>
+        <span class="project-link" style="color:var(--muted);font-size:0.82rem;">
+          Bientôt disponible
+        </span>
+      </div>
+    </div>
+  </div>
+  
+  -->
+ 
+  <p style="color:var(--muted);font-size:0.9rem;text-align:center;margin-top:1rem;">
+    D'autres projets seront ajoutés au fil du temps — revenez bientôt !
+  </p>
+</section>
+ 
 <div class="section-sep"></div>
 
 <!-- ============================== CV ============================== -->
