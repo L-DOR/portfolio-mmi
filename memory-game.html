@@ -262,7 +262,7 @@
     display: flex; align-items: center; justify-content: center;
   }
 
-  /* FRONT (caché) */
+  /* FRONT */
   .card-front {
     background: var(--bg3);
     border: 1px solid var(--border);
@@ -296,7 +296,7 @@
   }
   .card:not(.flipped):not(.matched):hover .card-front-logo { opacity: 1; }
 
-  /* BACK (révélé) */
+  /* BACK */
   .card-back {
     transform: rotateY(180deg);
     border: 1px solid var(--border);
@@ -629,7 +629,7 @@ function setDiff(btn, pairs) {
   state.pairs = pairs;
   state.maxTime = pairs === 6 ? 60 : pairs === 8 ? 120 : 200;
 
-  resetGame(); // reconstruit la grille avec la nouvelle difficulté
+  resetGame();
 }
 
 // ─── SHUFFLE ────────────────────────────────────────────────────────────
@@ -691,7 +691,6 @@ function startGame() {
     updateTime();
     if (state.elapsed >= state.maxTime) {
       clearInterval(state.timer);
-      // Time's up — show game over with red tint
       showTimeUp();
     }
   }, 1000);
@@ -709,7 +708,6 @@ function renderGrid() {
 
   state.cards.forEach((card, idx) => {
     const el = document.createElement('div');
-    // La classe d'entrée est séparée — elle ne touche pas la transition du flip
     el.className = `card ${card.theme} entering`;
     el.dataset.idx = idx;
     el.innerHTML = `
@@ -723,7 +721,6 @@ function renderGrid() {
       </div>`;
     el.addEventListener('click', () => flipCard(idx, el));
     grid.appendChild(el);
-    // Retire la classe d'entrée après l'animation pour libérer la transition du flip
     setTimeout(() => el.classList.remove('entering'), 400 + idx * 35);
   });
 }
