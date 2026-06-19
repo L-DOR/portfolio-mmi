@@ -488,7 +488,7 @@
 
 <!-- HEADER -->
 <header>
-  <a href="portfolio-mmi.html" class="back-btn">
+  <a href="index.html" class="back-btn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
     Retour au portfolio
   </a>
@@ -731,12 +731,10 @@ function renderGrid() {
 // ─── FLIP CARD ──────────────────────────────────────────────────────────
 function flipCard(idx, el) {
   if (!state.started) return;
-  // On bloque seulement si on a déjà 2 cartes retournées non matchées en attente
   if (state.flipped.length >= 2) return;
   if (state.flipped.includes(idx)) return;
   if (state.matched.includes(idx)) return;
 
-  // Retournement immédiat, visible tout de suite
   el.classList.add('flipped');
   state.flipped.push(idx);
 
@@ -749,17 +747,15 @@ function flipCard(idx, el) {
     const c2 = state.cards[i2];
 
     if (c1.id === c2.id) {
-      // MATCH — on marque immédiatement, les cartes restent retournées
       state.matched.push(i1, i2);
       const timeBonus = Math.max(0, state.maxTime - state.elapsed);
       const pts = 100 + Math.floor(timeBonus * 0.5);
       state.score += pts;
 
-      // Petite animation de succès puis libération
       setTimeout(() => {
         [i1, i2].forEach(i => {
           const card = document.querySelector(`[data-idx="${i}"]`);
-          if (card) card.classList.add('matched'); // reste retournée + glow
+          if (card) card.classList.add('matched'); 
         });
         state.flipped = [];
         updateStats();
@@ -769,8 +765,6 @@ function flipCard(idx, el) {
         }
       }, 250);
     } else {
-      // NO MATCH — les deux cartes sont visibles le temps que le joueur les mémorise,
-      // puis elles se retournent après un délai naturel
       setTimeout(() => {
         [i1, i2].forEach(i => {
           const card = document.querySelector(`[data-idx="${i}"]`);
@@ -783,7 +777,7 @@ function flipCard(idx, el) {
           }
         });
         state.flipped = [];
-      }, 1000); // 1s de visibilité avant de se retourner
+      }, 1000); 
     }
   }
 }
@@ -820,7 +814,6 @@ function showWin() {
 
 function showTimeUp() {
   state.started = false;
-  // Reveal all remaining cards briefly then show overlay
   document.querySelectorAll('.card:not(.matched)').forEach(c => c.classList.add('flipped'));
   setTimeout(() => {
     document.getElementById('wMoves').textContent = state.moves;
