@@ -3,191 +3,969 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site vitrine fictif · Portfolio MMI</title>
+<title>Camping Relais de la Bresque — Entre Var & Verdon</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
+  :root {
+    --jade: #1a6b4a;
+    --jade-light: #2a9d6e;
+    --water: #3ba8c5;
+    --water-pale: #a8dce9;
+    --sand: #e8d5b0;
+    --sand-dark: #c4a96b;
+    --night: #0b1a14;
+    --night-mid: #112a1e;
+    --off-white: #f4f0e8;
+    --white: #ffffff;
+    --accent: #f0a500;
+  }
+
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --c1: #FF6B6B;
-    --c2: #FF8E53;
-    --c3: #A855F7;
-    --c4: #3B82F6;
-    --c5: #06B6D4;
-    --bg: #0A0A0F;
-    --bg2: #111118;
-    --bg3: #18181F;
-    --text: #F0EFF8;
-    --muted: #9998AA;
-    --border: rgba(255,255,255,0.08);
-    --grad: linear-gradient(135deg, var(--c1), var(--c2), var(--c3));
-    --grad2: linear-gradient(135deg, var(--c3), var(--c4), var(--c5));
-    --card-size: clamp(70px, 13vw, 110px);
-  }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
 
-  html, body {
-    min-height: 100vh;
+  body {
+    background: var(--night);
+    color: var(--off-white);
     font-family: 'Space Grotesk', sans-serif;
-    background: var(--bg);
-    color: var(--text);
     overflow-x: hidden;
-    cursor: none;
   }
 
-  /* CURSOR */
-  .cursor {
-    width: 12px; height: 12px;
-    background: var(--c1);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.15s, background 0.3s;
-    mix-blend-mode: difference;
-  }
-  .cursor-trail {
-    width: 36px; height: 36px;
-    border: 1.5px solid rgba(255,107,107,0.4);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-  }
-
-  /* PARTICLES */
-  #particles {
-    position: fixed; inset: 0;
-    pointer-events: none; z-index: 0; overflow: hidden;
-  }
-  .particle {
-    position: absolute; width: 2px; height: 2px;
-    background: white; border-radius: 50%; opacity: 0;
-    animation: twinkle var(--d) ease-in-out infinite var(--delay);
-  }
-  @keyframes twinkle {
-    0%, 100% { opacity: 0; }
-    50% { opacity: var(--op); }
-  }
-
-  /* BLOBS */
-  .blob {
-    position: fixed; border-radius: 50%;
-    filter: blur(90px); opacity: 0.1;
-    pointer-events: none; z-index: 0;
-    animation: floatBlob 10s ease-in-out infinite;
-  }
-  .b1 { width:500px;height:500px;background:var(--c3);top:-100px;right:-100px; }
-  .b2 { width:350px;height:350px;background:var(--c1);bottom:-80px;left:-80px;animation-delay:-4s; }
-  @keyframes floatBlob {
-    0%,100%{transform:translate(0,0);}
-    50%{transform:translate(20px,-20px);}
-  }
-
-  /* HEADER */
-  header {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 1.2rem 3rem;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 1.1rem 2.5rem;
-    background: rgba(10,10,15,0.75);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
+    background: linear-gradient(to bottom, rgba(11,26,20,0.95) 0%, transparent 100%);
+    transition: background 0.4s;
   }
-  .back-btn {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    color: var(--muted); text-decoration: none;
-    font-size: 0.85rem; font-weight: 500;
-    transition: color 0.2s;
-    cursor: none;
+  nav.scrolled { background: rgba(11,26,20,0.97); backdrop-filter: blur(12px); }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    letter-spacing: 0.04em;
+    color: var(--sand);
+    line-height: 1.2;
   }
-  .back-btn svg { width:16px;height:16px;transition:transform 0.2s; }
-  .back-btn:hover { color: var(--text); }
-  .back-btn:hover svg { transform: translateX(-3px); }
-  .header-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem; font-weight: 800;
-    background: var(--grad);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .nav-logo span { display: block; font-size: 0.7rem; font-family: 'Space Grotesk', sans-serif; font-weight: 300; color: var(--water-pale); letter-spacing: 0.18em; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { color: rgba(244,240,232,0.75); text-decoration: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--water-pale); }
+  .nav-cta {
+    background: var(--jade-light); color: white; border: none;
+    padding: 0.65rem 1.6rem; border-radius: 2px;
+    font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
   }
-  .header-tag {
-    font-size: 0.75rem; font-weight: 500;
-    color: var(--muted);
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    padding: 0.25rem 0.75rem;
-    border-radius: 100px;
+  .nav-cta:hover { background: var(--jade); transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative; height: 100vh; width: 100%;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  #hero-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    z-index: 0;
+  }
+  .hero-bg-img {
+    position: absolute; inset: 0;
+    background-image: url('https://www.lerelaisdelabresque.net/wp-content/uploads/2024/05/IMG_2092-scaled.jpg');
+    background-size: cover; background-position: center;
+    z-index: 0;
+    filter: brightness(0.35) saturate(1.4);
+  }
+  .hero-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(135deg, rgba(11,26,20,0.6) 0%, rgba(59,168,197,0.15) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2; text-align: center;
+    max-width: 900px; padding: 2rem;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--water-pale); margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: center; gap: 1rem;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; width: 40px; height: 1px; background: var(--water-pale); opacity: 0.6;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 1.2rem;
+  }
+  .hero-title em { color: var(--water-pale); font-style: italic; }
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 300;
+    color: rgba(244,240,232,0.8);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--jade-light); color: white;
+    padding: 1rem 2.5rem; border-radius: 2px;
+    font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none;
+    transition: all 0.3s; display: inline-block;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--jade); transform: translateX(-100%); transition: transform 0.3s;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-secondary {
+    border: 1px solid rgba(168,220,233,0.5); color: var(--water-pale);
+    padding: 1rem 2.5rem; border-radius: 2px;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; transition: all 0.3s; display: inline-block;
+    backdrop-filter: blur(4px);
+  }
+  .btn-secondary:hover { background: rgba(59,168,197,0.15); border-color: var(--water-pale); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    color: rgba(244,240,232,0.5); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  .hero-scroll svg { opacity: 0.5; }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+  .hero-badges {
+    position: absolute; bottom: 3rem; right: 3rem; z-index: 2;
+    display: flex; flex-direction: column; gap: 0.8rem;
+  }
+  .badge {
+    background: rgba(11,26,20,0.8); border: 1px solid rgba(168,220,233,0.25);
+    backdrop-filter: blur(8px);
+    padding: 0.7rem 1.2rem;
+    display: flex; align-items: center; gap: 0.8rem;
+    font-size: 0.78rem;
+  }
+  .badge-icon { font-size: 1.1rem; }
+  .badge-text { line-height: 1.3; }
+  .badge-text strong { display: block; color: var(--water-pale); font-weight: 600; }
+  .badge-text span { color: rgba(244,240,232,0.6); font-weight: 300; font-size: 0.72rem; }
+
+  /* ─── POOL 3D SECTION ─── */
+  #pool-section {
+    position: relative; background: var(--night-mid);
+    padding: 0;
+    overflow: hidden;
+  }
+  .pool-header {
+    text-align: center; padding: 6rem 2rem 3rem;
+    position: relative; z-index: 2;
+  }
+  .section-label {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--water); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4.5vw, 4rem);
+    line-height: 1.15; color: var(--white); margin-bottom: 1.2rem;
+  }
+  .section-title em { color: var(--water-pale); font-style: italic; }
+  .section-sub {
+    font-size: 1rem; font-weight: 300; color: rgba(244,240,232,0.65);
+    max-width: 560px; margin: 0 auto; line-height: 1.75;
+  }
+  #pool-canvas-container {
+    position: relative; width: 100%; height: 70vh;
+    cursor: grab;
+  }
+  #pool-canvas-container:active { cursor: grabbing; }
+  #pool-canvas {
+    width: 100%; height: 100%; display: block;
+  }
+  .pool-hint {
+    position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    background: rgba(11,26,20,0.8); border: 1px solid rgba(59,168,197,0.3);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 1.5rem; font-size: 0.75rem; color: var(--water-pale);
+    letter-spacing: 0.1em; white-space: nowrap;
+    opacity: 1; transition: opacity 1s;
+  }
+  .pool-features {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 1px;
+    background: rgba(255,255,255,0.05);
+  }
+  .pool-feat {
+    padding: 2.5rem; background: var(--night-mid);
+    text-align: center; transition: background 0.3s;
+  }
+  .pool-feat:hover { background: rgba(59,168,197,0.08); }
+  .pool-feat-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .pool-feat-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--water-pale); margin-bottom: 0.5rem; }
+  .pool-feat-text { font-size: 0.88rem; color: rgba(244,240,232,0.6); line-height: 1.6; }
+
+  /* ─── NUMBERS ─── */
+  #numbers {
+    background: var(--jade);
+    padding: 5rem 3rem;
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem;
+    text-align: center;
+  }
+  .num-item {}
+  .num-val {
+    font-family: 'Playfair Display', serif; font-size: clamp(3rem, 5vw, 5rem);
+    color: var(--white); line-height: 1;
+    position: relative; display: inline-block;
+  }
+  .num-val::after { content: attr(data-suffix); font-size: 0.45em; vertical-align: top; margin-top: 0.5rem; display: inline-block; }
+  .num-label { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+
+  /* ─── ACCOMMODATIONS ─── */
+  #accom {
+    padding: 7rem 3rem; background: var(--night);
+  }
+  .accom-intro { text-align: center; margin-bottom: 4rem; }
+  .accom-grid {
+    display: grid; grid-template-columns: repeat(2,1fr); gap: 2px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .accom-card {
+    position: relative; overflow: hidden; aspect-ratio: 4/3;
+    cursor: pointer; group: true;
+  }
+  .accom-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    filter: brightness(0.6) saturate(1.2);
+  }
+  .accom-card:hover img { transform: scale(1.07); filter: brightness(0.45) saturate(1.4); }
+  .accom-card-content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2.5rem;
+    background: linear-gradient(to top, rgba(11,26,20,0.85) 0%, transparent 60%);
+  }
+  .accom-type {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--water-pale); margin-bottom: 0.5rem;
+  }
+  .accom-name {
+    font-family: 'Playfair Display', serif; font-size: 1.9rem; color: white; margin-bottom: 0.5rem;
+  }
+  .accom-desc { font-size: 0.85rem; color: rgba(244,240,232,0.7); line-height: 1.5; max-width: 380px; }
+  .accom-arrow {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    width: 42px; height: 42px; border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .accom-card:hover .accom-arrow { opacity: 1; }
+  .accom-card.wide { grid-column: span 2; aspect-ratio: 16/7; }
+
+  /* ─── REGION / EXPLORE ─── */
+  #explore {
+    position: relative; overflow: hidden;
+    background: var(--night-mid);
+    padding: 7rem 3rem;
+  }
+  .explore-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+    max-width: 1200px; margin: 0 auto; align-items: center;
+  }
+  .explore-visual {
+    position: relative; border-radius: 0;
+    overflow: hidden;
+  }
+  .explore-visual img { width: 100%; display: block; filter: saturate(1.3); }
+  .explore-map-dots {
+    position: absolute; inset: 0;
+  }
+  .map-dot {
+    position: absolute; transform: translate(-50%,-50%);
+  }
+  .map-dot-inner {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--water-pale);
+    position: relative;
+  }
+  .map-dot-inner::before {
+    content: ''; position: absolute; inset: -6px; border-radius: 50%;
+    border: 1px solid var(--water-pale); opacity: 0.5;
+    animation: pulse 2s infinite;
+  }
+  .map-dot-label {
+    position: absolute; top: -2rem; left: 50%; transform: translateX(-50%);
+    white-space: nowrap; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+    color: var(--water-pale); text-transform: uppercase;
+    background: rgba(11,26,20,0.8); padding: 0.2rem 0.6rem;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.8); opacity: 0; }
+  }
+  .explore-text { }
+  .explore-destinations { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .dest-item {
+    display: flex; gap: 1.5rem; align-items: flex-start;
+    padding: 1.2rem; border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.3s, background 0.3s; cursor: default;
+  }
+  .dest-item:hover { border-color: rgba(59,168,197,0.3); background: rgba(59,168,197,0.05); }
+  .dest-distance {
+    font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--water);
+    min-width: 70px; line-height: 1;
+  }
+  .dest-distance small { font-size: 0.55em; font-family: 'Space Grotesk', sans-serif; display: block; color: rgba(244,240,232,0.5); }
+  .dest-info h4 { font-size: 0.95rem; font-weight: 600; color: var(--off-white); margin-bottom: 0.25rem; }
+  .dest-info p { font-size: 0.82rem; color: rgba(244,240,232,0.55); line-height: 1.5; }
+
+  /* ─── ACTIVITIES ─── */
+  #activities {
+    padding: 7rem 3rem;
+    background: var(--night);
+  }
+  .activities-intro { text-align: center; margin-bottom: 4rem; }
+  .activities-marquee {
+    overflow: hidden; white-space: nowrap; margin-bottom: 4rem;
+    border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 1.2rem 0;
+  }
+  .marquee-track {
+    display: inline-block; animation: marquee 20s linear infinite;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    color: rgba(244,240,232,0.4);
+  }
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .activities-list {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .act-item {
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(255,255,255,0.07);
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .act-item::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--jade-light), var(--water));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+  }
+  .act-item:hover::before { transform: scaleX(1); }
+  .act-item:hover { border-color: rgba(59,168,197,0.25); }
+  .act-emoji { font-size: 2.2rem; margin-bottom: 1.2rem; display: block; }
+  .act-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--off-white); margin-bottom: 0.5rem; }
+  .act-text { font-size: 0.85rem; color: rgba(244,240,232,0.55); line-height: 1.65; }
+
+  /* ─── GALLERY ─── */
+  #gallery {
+    background: var(--night-mid); padding: 7rem 3rem;
+  }
+  .gallery-intro { text-align: center; margin-bottom: 3rem; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 260px 260px;
+    gap: 4px; max-width: 1300px; margin: 0 auto;
+  }
+  .gal-item { overflow: hidden; position: relative; }
+  .gal-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s, filter 0.4s;
+    filter: saturate(1.1) brightness(0.85);
+  }
+  .gal-item:hover img { transform: scale(1.06); filter: saturate(1.4) brightness(0.9); }
+  .gal-item.tall { grid-row: span 2; }
+  .gal-item.wide { grid-column: span 2; }
+
+  /* ─── TESTIMONIALS ─── */
+  #testimonials { padding: 7rem 3rem; background: var(--night); text-align: center; }
+  .stars { color: var(--accent); font-size: 1.1rem; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+  .testi-slider { max-width: 700px; margin: 0 auto; }
+  .testi-text {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: var(--off-white); line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+  .testi-author { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--water-pale); }
+  .testi-nav { display: flex; gap: 0.5rem; justify-content: center; margin-top: 2.5rem; }
+  .testi-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25);
+    border: none; cursor: pointer; transition: all 0.3s; padding: 0;
+  }
+  .testi-dot.active { background: var(--water-pale); width: 24px; border-radius: 3px; }
+
+  /* ─── BOOKING CTA ─── */
+  #booking {
+    position: relative; overflow: hidden;
+    min-height: 60vh; display: flex; align-items: center; justify-content: center;
+  }
+  .booking-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://www.lerelaisdelabresque.net/wp-content/uploads/2025/11/IMG_2079-scaled.jpg');
+    background-size: cover; background-position: center;
+    filter: brightness(0.3) saturate(1.5);
+  }
+  .booking-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(26,107,74,0.5), rgba(11,26,20,0.8));
+  }
+  .booking-content { position: relative; z-index: 1; text-align: center; padding: 4rem 2rem; }
+  .booking-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; color: var(--water-pale); margin-bottom: 1.5rem; }
+  .booking-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    color: white; line-height: 1.1; margin-bottom: 1rem;
+  }
+  .booking-title em { color: var(--water-pale); font-style: italic; }
+  .booking-season {
+    font-size: 1rem; color: rgba(244,240,232,0.7); margin-bottom: 2.5rem; font-weight: 300;
+  }
+  .booking-season strong { color: var(--sand); font-weight: 600; }
+  .booking-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #060f0b;
+    padding: 4rem 3rem 2rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;
+    max-width: 1200px; margin: 0 auto 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .footer-brand .nav-logo { margin-bottom: 1rem; }
+  .footer-desc { font-size: 0.85rem; color: rgba(244,240,232,0.45); line-height: 1.7; margin-bottom: 1.5rem; }
+  .footer-contact a { display: block; font-size: 0.85rem; color: var(--water-pale); text-decoration: none; margin-bottom: 0.4rem; }
+  .footer-col h5 { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,240,232,0.4); margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 0.6rem; }
+  .footer-col a { color: rgba(244,240,232,0.65); text-decoration: none; font-size: 0.88rem; transition: color 0.3s; }
+  .footer-col a:hover { color: var(--water-pale); }
+  .footer-bottom {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem; color: rgba(244,240,232,0.3);
   }
 
-  /* MAIN LAYOUT */
-  main {
-    position: relative; z-index: 1;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-start;
-    padding: 8rem 1.5rem 4rem;
-    gap: 2rem;
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s, transform 0.8s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.35s; }
+
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #numbers { grid-template-columns: repeat(2,1fr); }
+    .accom-grid { grid-template-columns: 1fr; }
+    .accom-card.wide { grid-column: span 1; aspect-ratio: 4/3; }
+    .explore-grid { grid-template-columns: 1fr; }
+    .activities-list { grid-template-columns: 1fr 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2,1fr); grid-template-rows: auto; }
+    .gal-item.tall { grid-row: span 1; }
+    .gal-item.wide { grid-column: span 2; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .pool-features { grid-template-columns: 1fr; }
   }
 
-  </style>
+  @media (max-width: 600px) {
+    .hero-badges { display: none; }
+    #numbers { padding: 3rem 1.5rem; }
+    .activities-list { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-trail" id="cursorTrail"></div>
-<div id="particles"></div>
-<div class="blob b1"></div>
-<div class="blob b2"></div>
 
-<!-- HEADER -->
-<header>
-  <a href="index.html" class="back-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    Retour au portfolio
-  </a>
-  <div class="header-title">Site vitrine fictif</div>
-  <span class="header-tag">Projet Web #3    </span>
-</header>
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">
+    Relais de la Bresque
+    <span>Camping ★★★ · Sillans-la-Cascade</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#pool-section">Piscine</a></li>
+    <li><a href="#accom">Hébergements</a></li>
+    <li><a href="#explore">Explorer</a></li>
+    <li><a href="#activities">Activités</a></li>
+  </ul>
+  <a href="https://bookingpremium.secureholiday.net/fr/3219/" target="_blank" class="nav-cta">Réserver</a>
+</nav>
 
-<!-- MAIN -->
-<main>
-  <div class="game-hero">
-    <div class="game-eyebrow">Projet HTML/CSS</div>
-    <h1 class="game-title">A <span>VENIR</span></h1>
-    <p class="game-subtitle">le site est en cours de développement...</p>
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-bg-img"></div>
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Camping ★★★ · Sillans-la-Cascade</div>
+    <h1 class="hero-title">
+      Entre <em>Var</em><br>& Verdon
+    </h1>
+    <p class="hero-subtitle">
+      Un camping 3 étoiles niché au cœur de la Provence, à deux pas des gorges du Verdon et de la cascade de Sillans.
+    </p>
+    <div class="hero-actions">
+      <a href="https://bookingpremium.secureholiday.net/fr/3219/" target="_blank" class="btn-primary"><span>Réserver mon séjour</span></a>
+      <a href="#pool-section" class="btn-secondary">Découvrir le camping</a>
+    </div>
   </div>
 
-<script
-// ─── CURSOR ─────────────────────────────────────────────────────────────
-const cursor = document.getElementById('cursor');
-const trail = document.getElementById('cursorTrail');
-let mx = 0, my = 0, tx = 0, ty = 0;
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx - 6 + 'px';
-  cursor.style.top = my - 6 + 'px';
+  <div class="hero-badges">
+    <div class="badge">
+      <span class="badge-icon">🏊</span>
+      <div class="badge-text">
+        <strong>Espace aquatique</strong>
+        <span>Plusieurs bassins</span>
+      </div>
+    </div>
+    <div class="badge">
+      <span class="badge-icon">🌊</span>
+      <div class="badge-text">
+        <strong>Cascade de Sillans</strong>
+        <span>À 5 minutes à pied</span>
+      </div>
+    </div>
+    <div class="badge">
+      <span class="badge-icon">⛺</span>
+      <div class="badge-text">
+        <strong>Ouvert 2026</strong>
+        <span>03 avril → 20 sept.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
+      <path d="M8 1v18M1 13l7 7 7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    Découvrir
+  </div>
+</section>
+
+<!-- ─── NUMBERS ─── -->
+<section id="numbers">
+  <div class="num-item">
+    <div class="num-val" data-target="5" data-suffix=" min">0</div>
+    <div class="num-label">De la cascade de Sillans</div>
+  </div>
+  <div class="num-item">
+    <div class="num-val" data-target="20" data-suffix=" min">0</div>
+    <div class="num-label">Du lac de Sainte-Croix</div>
+  </div>
+  <div class="num-item">
+    <div class="num-val" data-target="3" data-suffix=" ★">0</div>
+    <div class="num-label">Étoiles de confort</div>
+  </div>
+  <div class="num-item">
+    <div class="num-val" data-target="1" data-suffix=" h">0</div>
+    <div class="num-label">Des plages de Fréjus</div>
+  </div>
+</section>
+
+<!-- ─── POOL 3D ─── -->
+<section id="pool-section">
+  <div class="pool-header">
+    <div class="section-label reveal">Espace Aquatique</div>
+    <h2 class="section-title reveal reveal-delay-1">La piscine : votre <em>havre</em><br>de fraîcheur provençal</h2>
+    <p class="section-sub reveal reveal-delay-2">
+      Plongez dans notre espace aquatique au cœur du camping. Plusieurs bassins, transats au soleil, pataugeoire pour les enfants… le farniente absolu.
+    </p>
+  </div>
+
+  <div class="pool-features">
+    <div class="pool-feat reveal">
+      <div class="pool-feat-icon">🌊</div>
+      <div class="pool-feat-title">Plusieurs bassins</div>
+      <div class="pool-feat-text">Bassin principal, pataugeoire pour les plus petits, espace de détente.</div>
+    </div>
+    <div class="pool-feat reveal reveal-delay-1">
+      <div class="pool-feat-icon">☀️</div>
+      <div class="pool-feat-title">Transats & farniente</div>
+      <div class="pool-feat-text">Des transats face au soleil pour des après-midis mémorables en Provence.</div>
+    </div>
+    <div class="pool-feat reveal reveal-delay-2">
+      <div class="pool-feat-icon">🛡️</div>
+      <div class="pool-feat-title">Sécurité & convivialité</div>
+      <div class="pool-feat-text">Espace sécurisé, cadre convivial, pour toute la famille en toute sérénité.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ACCOMMODATIONS ─── -->
+<section id="accom">
+  <div class="accom-intro">
+    <div class="section-label reveal">Hébergements</div>
+    <h2 class="section-title reveal reveal-delay-1">Votre nid au cœur<br>de la <em>Provence</em></h2>
+    <p class="section-sub reveal reveal-delay-2">Du mobil-home confortable à l'hébergement insolite, choisissez votre façon de vivre le camping autrement.</p>
+  </div>
+  <div class="accom-grid">
+    <div class="accom-card wide reveal">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2019/12/EXT-M-H-3-350x300.jpg" alt="Mobil Home" loading="lazy">
+      <div class="accom-card-content">
+        <div class="accom-type">Locatif vedette</div>
+        <div class="accom-name">Mobil-Home</div>
+        <div class="accom-desc">Tout le confort d'une maison de vacances. 2 à 3 chambres, terrasse, équipé pour 2 à 6 personnes. Disponible à la semaine ou au week-end hors haute saison.</div>
+      </div>
+      <div class="accom-arrow">→</div>
+    </div>
+    <div class="accom-card reveal">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2019/02/louer-sahari-camping-relais-de-la-bresque-350x300.jpg" alt="Chalet" loading="lazy">
+      <div class="accom-card-content">
+        <div class="accom-type">Charme provençal</div>
+        <div class="accom-name">Chalet</div>
+        <div class="accom-desc">L'authenticité du bois au cœur de la nature. Terrasse privée face aux pins.</div>
+      </div>
+      <div class="accom-arrow">→</div>
+    </div>
+    <div class="accom-card reveal reveal-delay-1">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2019/02/louer-tente-free-flower-camping-relais-de-la-bresque-350x300.jpg" alt="Tente" loading="lazy">
+      <div class="accom-card-content">
+        <div class="accom-type">Insolite</div>
+        <div class="accom-name">Tente Glamour</div>
+        <div class="accom-desc">Le glamping version Provence : confort, originalité et nature à portée de main.</div>
+      </div>
+      <div class="accom-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EXPLORE REGION ─── -->
+<section id="explore">
+  <div class="explore-grid">
+    <div class="explore-visual reveal">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2024/05/IMG_2092-scaled.jpg" alt="Région Verdon" loading="lazy">
+    </div>
+    <div class="explore-text">
+      <div class="section-label reveal">La région</div>
+      <h2 class="section-title reveal reveal-delay-1">Des trésors<br>à portée de <em>roue</em></h2>
+      <p class="section-sub reveal reveal-delay-2" style="margin:0; max-width:none;">
+        Le Relais de la Bresque est bien plus qu'un camping : c'est votre camp de base idéal pour rayonner dans une des régions les plus époustouflantes de France.
+      </p>
+      <div class="explore-destinations reveal reveal-delay-3">
+        <div class="dest-item">
+          <div class="dest-distance">5<small>min</small></div>
+          <div class="dest-info">
+            <h4>Cascade de Sillans</h4>
+            <p>Surnommée le "Niagara provençal", une chute spectaculaire en plein cœur du village.</p>
+          </div>
+        </div>
+        <div class="dest-item">
+          <div class="dest-distance">20<small>min</small></div>
+          <div class="dest-info">
+            <h4>Lac de Sainte-Croix</h4>
+            <p>Eaux turquoise, pédalos, kayak. Un lac de légende aux portes du Verdon.</p>
+          </div>
+        </div>
+        <div class="dest-item">
+          <div class="dest-distance">30<small>min</small></div>
+          <div class="dest-info">
+            <h4>Gorges du Verdon</h4>
+            <p>Le Grand Canyon d'Europe. Randonnées, via ferrata, panoramas vertigineux.</p>
+          </div>
+        </div>
+        <div class="dest-item">
+          <div class="dest-distance">1<small>h</small></div>
+          <div class="dest-info">
+            <h4>Plages de Fréjus</h4>
+            <p>La Méditerranée à une heure pour les envies de sable et de mer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ACTIVITIES ─── -->
+<section id="activities">
+  <div class="activities-intro">
+    <div class="section-label reveal">Sur place</div>
+    <h2 class="section-title reveal reveal-delay-1">Animations & <em>activités</em></h2>
+    <p class="section-sub reveal reveal-delay-2">De quoi occuper toute la famille et trouver son rythme de vacances, que l'on cherche l'adrénaline ou la détente.</p>
+  </div>
+
+  <div class="activities-marquee">
+    <div class="marquee-track">
+      TYROLIENNE &nbsp;·&nbsp; PISCINE &nbsp;·&nbsp; MINI GOLF &nbsp;·&nbsp; BABY-FOOT &nbsp;·&nbsp; PING-PONG &nbsp;·&nbsp; PÉTANQUE &nbsp;·&nbsp; RANDONNÉE &nbsp;·&nbsp; KAYAK &nbsp;·&nbsp; SNACK BAR &nbsp;·&nbsp; PAIN FRAIS &nbsp;·&nbsp;
+      TYROLIENNE &nbsp;·&nbsp; PISCINE &nbsp;·&nbsp; MINI GOLF &nbsp;·&nbsp; BABY-FOOT &nbsp;·&nbsp; PING-PONG &nbsp;·&nbsp; PÉTANQUE &nbsp;·&nbsp; RANDONNÉE &nbsp;·&nbsp; KAYAK &nbsp;·&nbsp; SNACK BAR &nbsp;·&nbsp; PAIN FRAIS &nbsp;·&nbsp;
+    </div>
+  </div>
+
+  <div class="activities-list">
+    <div class="act-item reveal">
+      <span class="act-emoji">🧗</span>
+      <div class="act-title">Tyrolienne</div>
+      <div class="act-text">Une tyrolienne dans le camping pour des sensations garanties. Une attraction unique que les enfants redemanderont encore et encore.</div>
+    </div>
+    <div class="act-item reveal reveal-delay-1">
+      <span class="act-emoji">🏊</span>
+      <div class="act-title">Espace piscine</div>
+      <div class="act-text">Plusieurs bassins pour nager, se prélasser et jouer. Le cœur animé du camping sous le soleil provençal.</div>
+    </div>
+    <div class="act-item reveal reveal-delay-2">
+      <span class="act-emoji">⛳</span>
+      <div class="act-title">Mini golf</div>
+      <div class="act-text">Un parcours de mini golf pour des parties en famille ou entre amis, dans la bonne humeur des vacances.</div>
+    </div>
+    <div class="act-item reveal">
+      <span class="act-emoji">🥾</span>
+      <div class="act-title">Randonnées</div>
+      <div class="act-text">Des sentiers au départ du camping pour explorer la garrigue, les collines et les gorges environnantes à votre rythme.</div>
+    </div>
+    <div class="act-item reveal reveal-delay-1">
+      <span class="act-emoji">🥖</span>
+      <div class="act-title">Dépôt de pain</div>
+      <div class="act-text">Croissants et pains au chocolat disponibles chaque matin parce que les vacances commencent bien avec un bon petit-déjeuner.</div>
+    </div>
+    <div class="act-item reveal reveal-delay-2">
+      <span class="act-emoji">🍹</span>
+      <div class="act-title">Snack & bar</div>
+      <div class="act-text">Un snack sur place pour les petites faims et les apéros en fin de journée, dans une ambiance détendue et conviviale.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── GALLERY ─── -->
+<section id="gallery">
+  <div class="gallery-intro">
+    <div class="section-label reveal">Galerie</div>
+    <h2 class="section-title reveal reveal-delay-1">Vos futures <em>vacances</em><br>en images</h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="gal-item tall reveal">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2025/11/IMG_2076-scaled.jpg" alt="Piscine camping" loading="lazy">
+    </div>
+    <div class="gal-item reveal">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2025/11/IMG_2082-scaled.jpg" alt="Pataugeoire" loading="lazy">
+    </div>
+    <div class="gal-item reveal reveal-delay-1">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2025/11/IMG_2080-scaled.jpg" alt="Camping Verdon" loading="lazy">
+    </div>
+    <div class="gal-item reveal">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2025/11/IMG_2079-scaled.jpg" alt="Transats piscine" loading="lazy">
+    </div>
+    <div class="gal-item reveal reveal-delay-1">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2025/11/IMG_2077-scaled.jpg" alt="Ambiance camping" loading="lazy">
+    </div>
+    <div class="gal-item wide reveal reveal-delay-2">
+      <img src="https://www.lerelaisdelabresque.net/wp-content/uploads/2025/03/accueil-du-camping-le-relais-de-la-bresque-dans-le-Verdon.webp" alt="Accueil camping Verdon" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section id="testimonials">
+  <div class="section-label reveal">Avis vacanciers</div>
+  <div class="stars reveal">★★★★★</div>
+  <div class="testi-slider">
+    <div class="testi-text reveal" id="testi-text">
+      "Un cadre magnifique, le personnel est adorable et la piscine est superbe. On est à deux pas de la cascade, des gorges du Verdon… On revient tous les ans !"
+    </div>
+    <div class="testi-author reveal" id="testi-author">Marie & Pascal, famille de 4</div>
+    <div class="testi-nav">
+      <button class="testi-dot active" data-idx="0"></button>
+      <button class="testi-dot" data-idx="1"></button>
+      <button class="testi-dot" data-idx="2"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BOOKING CTA ─── -->
+<section id="booking">
+  <div class="booking-bg"></div>
+  <div class="booking-overlay"></div>
+  <div class="booking-content">
+    <div class="booking-label">Réservation</div>
+    <h2 class="booking-title">L'été en <em>Provence</em><br>vous attend</h2>
+    <p class="booking-season">Saison 2026 : <strong>3 avril → 20 septembre</strong></p>
+    <div class="booking-actions">
+      <a href="https://bookingpremium.secureholiday.net/fr/3219/" target="_blank" class="btn-primary"><span>Réserver en ligne</span></a>
+      <a href="tel:+330494046489" class="btn-secondary">📞 04 94 04 64 89</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">Relais de la Bresque<span>Camping ★★★ · Sillans-la-Cascade</span></div>
+      <p class="footer-desc">Angélique et Régis vous accueillent dans leur camping 3 étoiles entre Var et Verdon. Chaleur provençale garantie.</p>
+      <div class="footer-contact">
+        <a href="tel:+330494046489">📞 04 94 04 64 89</a>
+        <a href="mailto:info@lerelaisdelabresque.net">✉ info@lerelaisdelabresque.net</a>
+        <a>📍 15 chemin de la piscine, 83690 Sillans-la-Cascade</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Le camping</h5>
+      <ul>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-3-etoiles-verdon/">Présentation</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-piscine-sillans-la-cascade/">Piscine</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-animations-verdon/">Animations</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-services-sillans-la-cascade/">Services</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Hébergements</h5>
+      <ul>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/location-mobil-home-sillans-la-cascade/">Mobil-homes</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/location-insolite-sillans-la-cascade/">Insolites</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/emplacement-camping-verdon/">Emplacements</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-pas-cher-sillans-la-cascade/">Tarifs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>À explorer</h5>
+      <ul>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-sillans-la-cascade/">Sillans-la-Cascade</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-lac-sainte-croix/">Lac de Sainte-Croix</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-gorges-verdon/">Gorges du Verdon</a></li>
+        <li><a href="https://www.lerelaisdelabresque.net/fr/camping-provence/">Provence & littoral</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Camping Relais de la Bresque</span>
+    <span>Sillans-la-Cascade · Var · Provence</span>
+  </div>
+</footer>
+
+<script>
+
+// ─── NAV SCROLL ───
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 });
-setInterval(() => {
-  tx += (mx - tx) * 0.12; ty += (my - ty) * 0.12;
-  trail.style.left = tx - 18 + 'px';
-  trail.style.top = ty - 18 + 'px';
-}, 16);
 
-// ─── PARTICLES ──────────────────────────────────────────────────────────
-const pCont = document.getElementById('particles');
-for (let i = 0; i < 60; i++) {
-  const p = document.createElement('div');
-  p.className = 'particle';
-  p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s;--op:${0.1+Math.random()*0.3};`;
-  pCont.appendChild(p);
+// ─── HERO PARTICLES CANVAS ───
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  resize(); window.addEventListener('resize', resize);
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * 2000, y: Math.random() * 1200,
+      vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.2,
+      r: Math.random() * 1.5 + 0.3,
+      a: Math.random() * 0.5 + 0.1,
+      c: Math.random() > 0.5 ? '59,168,197' : '168,220,233'
+    });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const scaleX = W / 2000, scaleY = H / 1200;
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = 2000; if (p.x > 2000) p.x = 0;
+      if (p.y < 0) p.y = 1200; if (p.y > 1200) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x * scaleX, p.y * scaleY, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.c},${p.a})`;
+      ctx.fill();
+    });
+    particles.forEach((p, i) => {
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const dx = (p.x - q.x) * scaleX, dy = (p.y - q.y) * scaleY;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 120) {
+          ctx.beginPath();
+          ctx.moveTo(p.x * scaleX, p.y * scaleY);
+          ctx.lineTo(q.x * scaleX, q.y * scaleY);
+          ctx.strokeStyle = `rgba(59,168,197,${0.12 * (1 - d/120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ─── COUNTER ANIMATION ───
+function animateCounters() {
+  document.querySelectorAll('.num-val').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix;
+    let current = 0;
+    const step = target / 40;
+    const interval = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.round(current);
+      if (current >= target) clearInterval(interval);
+    }, 30);
+  });
 }
+const numbersSection = document.getElementById('numbers');
+const numbersObserver = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) { animateCounters(); numbersObserver.disconnect(); }
+}, { threshold: 0.5 });
+numbersObserver.observe(numbersSection);
 
-// ─── INIT ────────────────────────────────────────────────────────────────
-buildIdleGrid();
-document.getElementById('statPairs').textContent = `0 / ${state.pairs}`;
+// ─── SCROLL REVEAL ───
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObserver.observe(el));
+
+// ─── TESTIMONIALS ───
+const testimonials = [
+  { text: '"Un cadre magnifique, le personnel est adorable et la piscine est superbe. On est à deux pas de la cascade, des gorges du Verdon… On revient tous les ans !"', author: 'Marie & Pascal, famille de 4' },
+  { text: '"Angélique et Régis sont aux petits soins. La tyrolienne a été la star des vacances pour nos enfants. Un camping qui tient toutes ses promesses."', author: 'Thomas, 2 semaines en août' },
+  { text: '"Emplacement spacieux, cadre verdoyant, et à 5 minutes à pied de la cascade. La piscine est impeccable. On a adoré et on recommande sans hésiter."', author: 'Sophie & Laurent, TripAdvisor' }
+];
+let currentTesti = 0;
+function showTesti(idx) {
+  const text = document.getElementById('testi-text');
+  const author = document.getElementById('testi-author');
+  text.style.opacity = '0'; author.style.opacity = '0';
+  setTimeout(() => {
+    text.textContent = testimonials[idx].text;
+    author.textContent = testimonials[idx].author;
+    text.style.opacity = '1'; author.style.opacity = '1';
+  }, 300);
+  document.querySelectorAll('.testi-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+document.querySelectorAll('.testi-dot').forEach(dot => {
+  dot.addEventListener('click', () => { currentTesti = parseInt(dot.dataset.idx); showTesti(currentTesti); });
+});
+setInterval(() => { currentTesti = (currentTesti + 1) % testimonials.length; showTesti(currentTesti); }, 5000);
+document.getElementById('testi-text').style.transition = 'opacity 0.3s';
+document.getElementById('testi-author').style.transition = 'opacity 0.3s';
+
+// ─── PARALLAX HERO ───
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  const heroBg = document.querySelector('.hero-bg-img');
+  if (heroBg && y < window.innerHeight) heroBg.style.transform = `translateY(${y * 0.4}px)`;
+});
 </script>
 </body>
 </html>
